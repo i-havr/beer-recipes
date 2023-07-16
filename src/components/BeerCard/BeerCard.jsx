@@ -41,22 +41,6 @@ export const BeerCard = ({ beer, onSelectRecipe, selectedRecipes }) => {
               </SC.Description>
             </SC.TextWrapper>
             <SC.ImageWrapper>
-              {/* <SC.InfoWrapper>
-              First brewed:
-              <SC.FirstBrewed>{first_brewed}</SC.FirstBrewed>
-              <br />
-              <SC.Line />
-              Goes perfectly with:
-              <ul>
-                {food_pairing.map((item) => (
-                  <SC.FoodPairing key={item}>- {item}</SC.FoodPairing>
-                ))}
-                <br />
-              </ul>
-              <SC.Line />
-              Brewers tips:
-              <SC.BrewersTips>{brewers_tips}</SC.BrewersTips>
-            </SC.InfoWrapper> */}
               <SC.AlcoholContent>
                 ABV
                 <br />
@@ -69,18 +53,6 @@ export const BeerCard = ({ beer, onSelectRecipe, selectedRecipes }) => {
                 style={isSelected ? { scale: "1.5", rotate: "6deg" } : null}
               />
             </SC.ImageWrapper>
-
-            {/* <SC.AvatarFrame>
-          <SC.AvatarWrapper>
-            <SC.Avatar src={avatar} alt={name} title={name} />
-          </SC.AvatarWrapper>
-          <SC.EmptyAvatarLayer />
-        </SC.AvatarFrame> */}
-
-            {/* <CardButton
-          actionHandler={() => onFollowButton(id)}
-          isFollowed={isFollowed(id)}
-        /> */}
           </SC.ContentCardWrapper>
         </SC.LinkStyled>
       </SC.BeerCard>

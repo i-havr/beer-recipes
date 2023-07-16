@@ -16,12 +16,16 @@ export default function Home() {
   const deleteRecipes = useRecipes((state) => state.deleteRecipes);
 
   const cardsObserver = new IntersectionObserver((entries, observer) => {
-    console.log(entries);
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        console.log("hello");
+      }
+    });
   }, {});
 
   document
-    .querySelectorAll("li")
-    .forEach((card) => cardsObserver.observe(card));
+    .querySelectorAll(".block")
+    .forEach((block) => cardsObserver.observe(block));
 
   const getBeersList = useCallback(
     async (page) => {
@@ -96,7 +100,7 @@ export default function Home() {
     return shownRecipes;
   };
 
-  console.log(page, recipes);
+  // console.log(page, recipes);
 
   return renderedRecipes.length ? (
     <SC.Home>

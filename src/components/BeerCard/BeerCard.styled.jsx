@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export const BeerCard = styled.li`
+export const BeerCard = styled.div`
   margin: 10px;
 `;
 

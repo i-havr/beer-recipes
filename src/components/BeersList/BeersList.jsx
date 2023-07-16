@@ -4,41 +4,33 @@ import { BeerCard } from "../BeerCard";
 import * as SC from "./BeersList.styled";
 
 export const BeersList = ({ beers, onSelectRecipe, selectedRecipes }) => {
+  // console.log(beers);
+  const renderBlocks = () => {
+    const blocks = beers.reduce((acc, item, index) => {
+      if (index % 5 === 0) {
+        acc.push([]);
+      }
+      acc[acc.length - 1].push(item);
+      // console.log(acc);
+      return acc;
+    }, []);
+
+    return blocks.map((block, blockIndex) => (
+      <SC.Block className="block" key={blockIndex}>
+        {block.map((beer) => (
+          <BeerCard
+            key={beer.id}
+            beer={beer}
+            onSelectRecipe={onSelectRecipe}
+            selectedRecipes={selectedRecipes}
+          ></BeerCard>
+        ))}
+      </SC.Block>
+    ));
+  };
+
   if (beers) {
-    return (
-      <>
-        <SC.BeersList>
-          {beers.map((beer) => (
-            <BeerCard
-              key={beer.id}
-              beer={beer}
-              onSelectRecipe={onSelectRecipe}
-              selectedRecipes={selectedRecipes}
-            />
-          ))}
-        </SC.BeersList>
-        <SC.BeersList>
-          {beers.map((beer) => (
-            <BeerCard
-              key={beer.id}
-              beer={beer}
-              onSelectRecipe={onSelectRecipe}
-              selectedRecipes={selectedRecipes}
-            />
-          ))}
-        </SC.BeersList>
-        <SC.BeersList>
-          {beers.map((beer) => (
-            <BeerCard
-              key={beer.id}
-              beer={beer}
-              onSelectRecipe={onSelectRecipe}
-              selectedRecipes={selectedRecipes}
-            />
-          ))}
-        </SC.BeersList>
-      </>
-    );
+    return <SC.BeersList>{renderBlocks()}</SC.BeersList>;
   }
 };
 
