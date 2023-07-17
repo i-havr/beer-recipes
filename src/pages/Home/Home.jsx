@@ -3,6 +3,7 @@ import { BeersList } from "../../components/BeersList";
 import { Button } from "../../components/Button";
 import { getBeers } from "../../services/BeerApi";
 import { useRecipes } from "../../store";
+
 import * as SC from "./Home.styled";
 
 export default function Home() {
@@ -13,19 +14,28 @@ export default function Home() {
 
   const recipes = useRecipes((state) => state.recipes);
   const addRecipes = useRecipes((state) => state.addRecipes);
+  const refreshRecipes = useRecipes((state) => state.refreshRecipes);
   const deleteRecipes = useRecipes((state) => state.deleteRecipes);
 
-  const cardsObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        console.log("hello");
-      }
-    });
-  }, {});
+  // const cardsObserver = new IntersectionObserver(
+  //   (entries, observer) => {
+  //     entries.forEach((entry) => {
+  //       if (entry.isIntersecting) {
+  //         // console.log(entry.target);
+  //         setIteration((prev) => (prev !== prev + 1 ? prev + 1 : prev));
+  //         observer.unobserve(entry.target);
+  //       }
+  //     });
+  //   },
+  //   {
+  //     rootMargin: "0px",
+  //     threshold: 0.5,
+  //   }
+  // );
 
-  document
-    .querySelectorAll(".block")
-    .forEach((block) => cardsObserver.observe(block));
+  // document
+  //   .querySelectorAll(".block")
+  //   .forEach((block) => cardsObserver.observe(block));
 
   const getBeersList = useCallback(
     async (page) => {
@@ -74,39 +84,38 @@ export default function Home() {
   const toggleSelecting = (event, id) => {
     event.preventDefault();
 
-    const recipe = recipes.find((recipe) => recipe.id === id);
-    const select = (id) => {
-      setSelectedRecipes((prev) => [...prev, id]);
-    };
-
     isSelected(id)
       ? setSelectedRecipes((prev) => prev.filter((el) => el !== id))
       : setSelectedRecipes((prev) => [...prev, id]);
   };
 
-  const renderRecipes = (recipes) => {
-    return recipes.slice(0, 15);
-  };
-
-  const renderedRecipes = renderRecipes(recipes);
+  const renderedRecipes = recipes.slice(0, 15);
 
   const showRecipes = (renderedRecipes, scrollIteration) => {
     const start = scrollIteration * 5 - 5;
     const end = scrollIteration * 5;
-    if (scrollIteration === 2) {
-      console.log("hello");
-    }
+    // if (scrollIteration === 2) {
+    //   console.log("hello");
+    // }
     const shownRecipes = renderedRecipes.slice(start, end);
     return shownRecipes;
   };
 
-  // console.log(page, recipes);
+  // console.log(recipes);
+
+  const refreshRecipesList = () => {
+    refreshRecipes();
+    setPage(1);
+  };
 
   return renderedRecipes.length ? (
     <SC.Home>
+      <Button type="refresh" actionHandler={() => refreshRecipesList()}>
+        Refresh the list
+      </Button>
       {selectedRecipes.length ? (
         <Button actionHandler={handleDeleteSelectedRecipes}>
-          Delete <br /> selected
+          Delete selected
         </Button>
       ) : null}
 

@@ -1,22 +1,53 @@
 import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 import { BeerCard } from "../BeerCard";
 
 import * as SC from "./BeersList.styled";
 
 export const BeersList = ({ beers, onSelectRecipe, selectedRecipes }) => {
-  // console.log(beers);
+  const [activeBlockIndex, setActiveBlockIndex] = useState(0);
+
+  useEffect(() => {
+    const cardsObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveBlockIndex(entry.target.id);
+
+            // observer.unobserve(entry.target);
+          }
+        });
+      },
+      { root: null, rootMargin: "0px", threshold: 0.7 }
+    );
+
+    document
+      .querySelectorAll(".block")
+      .forEach((block) => cardsObserver.observe(block));
+
+    return () => cardsObserver.disconnect();
+  }, []);
+
   const renderBlocks = () => {
-    const blocks = beers.reduce((acc, item, index) => {
+    const blocks = beers?.reduce((acc, item, index) => {
       if (index % 5 === 0) {
         acc.push([]);
       }
       acc[acc.length - 1].push(item);
-      // console.log(acc);
       return acc;
     }, []);
 
     return blocks.map((block, blockIndex) => (
-      <SC.Block className="block" key={blockIndex}>
+      <SC.Block
+        id={blockIndex}
+        style={
+          activeBlockIndex == blockIndex
+            ? { opacity: 1, transform: "translateY(0px)" }
+            : null
+        }
+        className="block"
+        key={blockIndex}
+      >
         {block.map((beer) => (
           <BeerCard
             key={beer.id}

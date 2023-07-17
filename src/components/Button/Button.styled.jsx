@@ -8,7 +8,6 @@ export const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px;
   height: 40px;
   padding: 18px;
   font-size: 12px;
@@ -23,9 +22,9 @@ export const Button = styled.button`
   border-radius: 10.3108px;
   cursor: pointer;
 
-  /* @media screen and (min-width: 768px) {
-    width: calc(100% - 256px);
-  } */
+  @media screen and (max-width: 767px) {
+    width: 60px;
+  }
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.4);

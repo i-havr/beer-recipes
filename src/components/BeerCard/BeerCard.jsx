@@ -4,18 +4,7 @@ import * as SC from "./BeerCard.styled";
 
 export const BeerCard = ({ beer, onSelectRecipe, selectedRecipes }) => {
   if (beer) {
-    const {
-      id,
-      name,
-      tagline,
-      description,
-      image_url,
-      abv,
-      brewers_tips,
-      first_brewed,
-      food_pairing,
-      volume,
-    } = beer;
+    const { id, name, tagline, description, image_url, abv } = beer;
 
     const isSelected = selectedRecipes.includes(id);
     const selectedStyle = {

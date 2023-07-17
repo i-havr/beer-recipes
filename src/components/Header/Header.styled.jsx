@@ -29,13 +29,18 @@ export const HeaderContent = styled.div`
   width: calc(100% - 64px);
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
 
   @media screen and (min-width: 768px) {
     width: calc(100% - 256px);
+  }
+
+  & > button {
+    position: static;
+    margin-left: 48px;
   }
 `;
 

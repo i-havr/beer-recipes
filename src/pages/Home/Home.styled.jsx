@@ -8,13 +8,11 @@ export const Home = styled.main`
   background: linear-gradient(
     60deg,
     rgba(84, 58, 183, 1) 0%,
-    rgba(0, 172, 193, 1) 100%
+    rgba(0, 172, 193, 0.8) 100%
   );
 `;
 
 export const Container = styled.div`
-  /* position: sticky;
-  top: 15%; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,12 +21,11 @@ export const Container = styled.div`
   height: 100%;
   margin-left: auto;
   margin-right: auto;
-  /* padding-top: 40px; */
-  /* padding-bottom: 40px; */
 
   & > h2 {
     margin-top: 24px;
     font-size: 12px;
     text-align: center;
+    color: rgba(255, 255, 255, 0.87);
   }
 `;
