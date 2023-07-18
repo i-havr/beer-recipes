@@ -57,7 +57,7 @@ BeerCard.propTypes = {
     first_brewed: PropTypes.string.isRequired,
     brewers_tips: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    image_url: PropTypes.string.isRequired,
+    image_url: PropTypes.string,
     abv: PropTypes.number.isRequired,
     food_pairing: PropTypes.arrayOf(PropTypes.string).isRequired,
     volume: PropTypes.shape({

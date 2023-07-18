@@ -1,24 +1,34 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { BeerCard } from "../BeerCard";
+import { useRecipes } from "../../store";
 
 import * as SC from "./BeersList.styled";
 
 export const BeersList = ({ beers, onSelectRecipe, selectedRecipes }) => {
   const [activeBlockIndex, setActiveBlockIndex] = useState(0);
+  const [iteration, setIteration] = useState(1);
+  const [removedBlocks, setRemovedBlocks] = useState([]);
+
+  const recipes = useRecipes((state) => state.recipes);
+  const deleteRecipes = useRecipes((state) => state.deleteRecipes);
 
   useEffect(() => {
     const cardsObserver = new IntersectionObserver(
-      (entries, observer) => {
+      (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveBlockIndex(entry.target.id);
-
-            // observer.unobserve(entry.target);
-          }
+          // if (entry.isIntersecting) {
+          //   setActiveBlockIndex(entry.target.id);
+          //   setIteration(+entry.target.id + 1);
+          // }
+          const visibleIndex = Math.floor(
+            entry.intersectionRatio * beers.length
+          );
+          setActiveBlockIndex(visibleIndex);
+          setIteration(+entry.target.id + 1);
         });
       },
-      { root: null, rootMargin: "0px", threshold: 0.7 }
+      { root: null, rootMargin: "-100px", threshold: 0.6 }
     );
 
     document
@@ -26,7 +36,22 @@ export const BeersList = ({ beers, onSelectRecipe, selectedRecipes }) => {
       .forEach((block) => cardsObserver.observe(block));
 
     return () => cardsObserver.disconnect();
-  }, []);
+  }, [beers.length]);
+
+  const handleRemoveFirstBlock = useCallback(() => {
+    const [firstBlock, ...restBlocks] = removedBlocks;
+    setRemovedBlocks([...restBlocks, firstBlock]);
+  }, [removedBlocks]);
+
+  useEffect(() => {
+    console.log(recipes);
+
+    if (iteration === 3) {
+      setIteration(1);
+      deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
+      handleRemoveFirstBlock();
+    }
+  }, [deleteRecipes, handleRemoveFirstBlock, iteration, recipes]);
 
   const renderBlocks = () => {
     const blocks = beers?.reduce((acc, item, index) => {
