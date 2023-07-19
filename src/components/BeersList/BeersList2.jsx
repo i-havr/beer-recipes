@@ -21,7 +21,7 @@ export const BeersList = ({
     return blocks.map((block, blockIndex) => (
       <SC.Block
         id={blockIndex}
-        key={block[0].name}
+        key={block[0].name + block[1].name}
         style={
           +activeBlockIndex === blockIndex
             ? { opacity: 1, transform: "translateY(0px)" }
@@ -42,7 +42,7 @@ export const BeersList = ({
   };
 
   if (beers) {
-    return <SC.BeersList>{renderBlocks()}</SC.BeersList>;
+    return <SC.BeersList className="beerList">{renderBlocks()}</SC.BeersList>;
   }
 };
 

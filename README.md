@@ -35,7 +35,7 @@ scroll through a list of recipes and to view a single recipe.
 - If there is no more recipes to show, you should make another API request to get another
   25 recipes.
 
-## Additional options:
+### Additional options:
 
 - Only 5 recipes should be visible on a current screen.
 - The amount of recipes rendered should always be 15.

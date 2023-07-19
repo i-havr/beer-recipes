@@ -20,43 +20,46 @@ export default function Home() {
   const refreshRecipes = useRecipes((state) => state.refreshRecipes);
   const deleteRecipes = useRecipes((state) => state.deleteRecipes);
 
-  const getBeersList = useCallback(
-    async (page) => {
-      try {
-        const data = await getBeers(page);
-        addRecipes(data);
-        setPage((prev) => prev + 1);
+  // const getBeersList = useCallback(
+  //   async (page) => {
+  //     try {
+  //       const data = await getBeers(page);
+  //       addRecipes(data);
+  //       setPage((prev) => prev + 1);
 
-        return data;
-      } catch (error) {
-        console.log("Whoops, something went wrong ", error.message);
-        return;
-      }
-    },
-    [addRecipes]
-  );
+  //       return data;
+  //     } catch (error) {
+  //       console.log("Whoops, something went wrong ", error.message);
+  //       return;
+  //     }
+  //   },
+  //   [addRecipes]
+  // );
 
-  const handleDelete = useCallback(
-    (event = null) => {
-      if (event) {
-        deleteRecipes(selectedRecipes);
-        setSelectedRecipes([]);
-      } else {
-        console.log(recipes.slice(0, 5).map((recipe) => recipe.id));
-        deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
-      }
-    },
-    [deleteRecipes, recipes, selectedRecipes]
-  );
+  const getBeersList = useCallback(async (page) => {
+    try {
+      const data = await getBeers(page);
+      // addRecipes(data);
+      setPage((prev) => prev + 1);
 
-  useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false);
+      return;
+    } catch (error) {
+      console.log("Whoops, something went wrong ", error.message);
       return;
     }
+  }, []);
 
-    // console.log("iteration", iteration);
+  const del = useCallback(() => {
+    if (iteration === 3) {
+      // setIteration(1);
+      deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
+      console.log("recipes", recipes);
+      setRenderedRecipes(recipes.slice(0, 15));
+      // return;
+    }
+  }, [deleteRecipes, iteration, recipes]);
 
+  useEffect(() => {
     const cardsObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
@@ -65,16 +68,20 @@ export default function Home() {
             setIteration(+entry.target.id + 1);
 
             console.log("iteration", iteration);
-
-            if (iteration === 3) {
-              observer.unobserve(entry.target);
-              setRenderedRecipes(recipes.slice(5, 20));
-              // setRenderedRecipes((prev) => [...prev, ...recipes.slice(15, 20)]);
-              // deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
-              // deleteRecipes([1, 2, 3, 4, 5]);
-              // setIteration(1);
-              // handleDelete();
-            }
+            del();
+            // if (iteration === 3) {
+            // observer.disconnect();
+            // deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
+            // console.log("recipes", recipes);
+            // setRenderedRecipes(recipes.slice(0, 15));
+            // setIteration(1);
+            // console.log("page", page);
+            // entries[0].target.style.display = "none";
+            // observer.unobserve(entry.target);
+            // observer.unobserve(entries[1].target);
+            // setRenderedRecipes(recipes.slice(5, 20));
+            // setRenderedRecipes((prev) => [...prev, ...recipes.slice(15, 20)]);
+            // }
           }
         });
       },
@@ -85,10 +92,17 @@ export default function Home() {
       .querySelectorAll(".block")
       .forEach((block) => cardsObserver.observe(block));
 
-    recipes.length < 15 && getBeersList(page);
-
     return () => cardsObserver.disconnect();
-  }, [deleteRecipes, getBeersList, isFirstRender, iteration, page, recipes]);
+  }, [del, deleteRecipes, iteration, recipes]);
+
+  useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return;
+    }
+
+    recipes.length < 15 && getBeersList(page);
+  }, [getBeersList, isFirstRender, page, recipes.length]);
 
   const isSelected = (id) => selectedRecipes.includes(id);
 
@@ -100,12 +114,17 @@ export default function Home() {
       : setSelectedRecipes((prev) => [...prev, id]);
   };
 
-  // console.log(recipes);
+  // console.log(page);
 
   const refreshRecipesList = () => {
     refreshRecipes();
     setSelectedRecipes([]);
     setPage(1);
+  };
+
+  const handleDeleteSelected = () => {
+    deleteRecipes(selectedRecipes);
+    setSelectedRecipes([]);
   };
 
   return recipes.length ? (
@@ -114,14 +133,15 @@ export default function Home() {
         Refresh the list
       </Button>
       {selectedRecipes.length ? (
-        <Button actionHandler={handleDelete}>Delete selected</Button>
+        <Button actionHandler={handleDeleteSelected}>Delete selected</Button>
       ) : null}
 
       <SC.Container>
         <h2>LEFT click to open, RIGHT click to select, SCROLL to get more</h2>
         <BeersList
           // beers={recipes.slice(0, 15)}
-          beers={renderedRecipes.slice(-15)}
+          // beers={renderedRecipes.slice(0, 15)}
+          beers={renderedRecipes}
           activeBlockIndex={activeBlockIndex}
           onSelectRecipe={toggleSelecting}
           selectedRecipes={selectedRecipes}

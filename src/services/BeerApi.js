@@ -8,11 +8,5 @@ export const getBeers = async (page = 1) => {
       page,
     },
   });
-  // console.log(response.data);
-  return response.data;
-};
-
-export const editFollowing = async (id, body) => {
-  const response = await axios.put(`/users/${id}`, body);
   return response.data;
 };

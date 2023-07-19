@@ -3,7 +3,7 @@ import { lazy } from "react";
 
 import Layout from "../Layout/Layout";
 
-const Home = lazy(() => import("../../pages/Home/Home"));
+const Home = lazy(() => import("../../pages/Home/Home3"));
 const BeerRecipe = lazy(() => import("../../pages/BeerRecipe/BeerRecipe"));
 
 function App() {

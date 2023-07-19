@@ -26,7 +26,7 @@ export const BeersList = styled.ul`
 export const Block = styled.li`
   display: flex;
   flex-direction: row;
-  opacity: 0;
+  /* opacity: 0; */
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
